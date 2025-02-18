@@ -1,100 +1,123 @@
+# 🚀 WSL, Ubuntu 24.04, Docker e Laravel 🌍
 
-# WSL, Ubuntu-24.04, Docker e Laravel.
+Este guia aborda a instalação e configuração do ambiente de desenvolvimento utilizando **WSL**, **Ubuntu 24.04**, **Docker** e **Laravel**, com base no Windows 11.
 
-Instalação realizada com Windows 11.
+## 1️⃣ Instalação do WSL e Ubuntu 24.04
 
-Com WSL ativado, adicionar uma distribuição do Linux Ubuntu.
+Primeiro, ative o **WSL** e adicione uma distribuição Linux **Ubuntu 24.04**.
 
-Abrir o Windows Power Shell como administrador.
+### 🔍 Verificando distribuições disponíveis
 
-Digite o comando para identificar as distribuições disponíveis: 
-
+Abra o **Windows PowerShell** como administrador e execute:
 
 ```bash
- wsl --list --online
+wsl --list --online
 ```
 
-Estarei utilizando o Ubuntu-24.04, para isso, no Power Shell digite:
+### 📥 Instalando o Ubuntu 24.04
+
+Para instalar a versão desejada, execute:
 
 ```bash
 wsl --install -d Ubuntu-24.04
 ```
-Com a isntalação finalizada, entre com um usuário e senha.
 
-## Instalação do Docker
+Após a instalação, crie um usuário e senha conforme solicitado.
 
-Primeiro, atualize os pacotes:
+---
+
+## 2️⃣ Instalação do Docker 🐳
+
+### 🔄 Atualizando os pacotes
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
-Em seguida, instale os pacotes necessários:
+
+### 📦 Instalando pacotes necessários
+
 ```bash
 sudo apt install -y ca-certificates curl gnupg
 ```
-Adicione a chave GPG oficial do Docker:
+
+### 🔑 Adicionando a chave GPG oficial do Docker
+
 ```bash
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 ```
-Adicione o repositório do Docker:
+
+### 📌 Adicionando o repositório do Docker
+
 ```bash
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
-Atualize os pacotes e instale o Docker:
+
+### 🏗️ Instalando o Docker
+
 ```bash
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
-Verifique a instalação:
+
+### ✅ Verificando a instalação
+
 ```bash
 docker --version
 ```
-### Habilitar o Docker no WSL
-Por padrão, o Docker no WSL precisa ser configurado para rodar sem o Docker Desktop. Para isso, execute:
+
+### ⚙️ Habilitando o Docker no WSL
+
 ```bash
 sudo usermod -aG docker $USER
 newgrp docker
-
 ```
-Agora, habilite o daemon do Docker no WSL:
+
+Inicie o serviço do Docker:
+
 ```bash
 sudo service docker start
-
 ```
-## Instalar o Docker Compose
-O Docker Compose já vem como um plugin do Docker, mas caso precise da versão standalone:
+
+---
+
+## 3️⃣ Instalação do Docker Compose 📦
+
+O Docker Compose já vem como um plugin do Docker. Caso precise da versão standalone, utilize:
 
 ```bash
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-Verifique a instalação:
+
+### 🔎 Verificando a instalação
 
 ```bash
 docker-compose --version
-
 ```
-## Instalando o PHP e o Instalador do Laravel
 
-Antes de instalar o Framework, realizo a instalação do php, composer e habilito o acesso ssh na distribuição Linux.
+---
 
-#### PHP e Composer
+## 4️⃣ Instalando PHP, Composer e SSH 🛠️
+
+### ⚡ Instalando PHP e Composer
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install curl php-cli php-mbstring unzip -y
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
-
 ```
-Para verificar a versão do composer instalada:
+
+### 🔍 Verificando a instalação do Composer
 
 ```bash
 composer -V
 ```
 
-#### SSH
+### 🔐 Instalando e configurando o SSH
+
 ```bash
 sudo apt update && sudo apt install openssh-server -y
 sudo systemctl status ssh
@@ -102,66 +125,113 @@ sudo systemctl start ssh
 sudo systemctl enable ssh
 ```
 
-Via SSH acesso a distribuição instalada via terminal e sigo a instalação conforme a documentação do Laravel em:
+Acesse a distribuição Linux via SSH para continuar com a instalação do Laravel.
 
-[Documentação para instalação do Laravel](https://laravel.com/docs/11.x/installation)
+---
 
-Comandos para instalação do PHP e do Framework:
+## 5️⃣ Instalação do Laravel 🌐
+
+Para instalar o Laravel, siga a documentação oficial:
+[📖 Documentação Laravel](https://laravel.com/docs/11.x/installation)
+
+### 📦 Instalando o PHP e o Laravel Installer
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 composer global require laravel/installer
 ```
-Após realizada a as intalações, já é possivel criar uma aplicação com o comando:
+
+### 🚀 Criando um novo projeto Laravel
+
 ```bash
 laravel new example-app
+cd example-app
 ```
+
+Instale as dependências:
 
 ```bash
-cd example-app
 npm install && npm run build
-composer run dev
+composer install
 ```
 
-## Ambiente de desenvolvimento
+---
 
-O ambiente foi desenvolvido com base no [Curso Completo e Gratuito de Laravel 11](https://academy.especializati.com.br/curso/laravel-11-completo-e-gratuito) da [Especializa Ti Academy](https://academy.especializati.com.br/) onde foi realizado algumas alterações disponiveis neste repositório.
+## 6️⃣ Configuração do ambiente de desenvolvimento 🖥️
 
-Com tudo pronto, crie uma rede no docker chamada `Laravel` suba os containers do projeto
+O ambiente foi baseado no [Curso Completo e Gratuito de Laravel 11](https://academy.especializati.com.br/curso/laravel-11-completo-e-gratuito) da [Especializa Ti Academy](https://academy.especializati.com.br/).
+
+### 🌍 Criando e configurando a rede no Docker
+
 ```bash
 docker network create laravel
 ```
-Suba os containers do projeto
+
+### 📌 Subindo os containers do projeto
+
 ```bash
 docker compose up -d
 ```
-Acesse o container
+
+### 🔑 Acessando o container
+
 ```bash
 docker compose exec app bash
 ```
-Instale as dependências do projeto
+
+### ⚡ Configuração do Laravel
+
+Instale as dependências:
+
 ```bash
 composer install
 ```
-Gere a key do projeto Laravel
+
+Gere a chave do projeto Laravel:
+
 ```bash
 php artisan key:generate
 ```
-Criar tabelas de dados do MySQL
+
+Crie as tabelas no MySQL:
+
 ```bash
 php artisan migrate
 ```
 
-no terminar para que possa realizar o teste de execução da aplicação, rode:
+Inicie o ambiente de desenvolvimento:
 
 ```bash
 npm run dev
 ```
-ou
+
+Ou construa os assets para produção:
 
 ```bash
 npm run build
 ```
 
+Acesse a aplicação em: **[http://localhost:8000](http://localhost:8000)**
 
-Acesse o projeto em http://localhost:8000
+---
+
+## 7️⃣ Tradução para PT-BR 🇧🇷
+
+Caso queira instalar a tradução **PT-BR** no Laravel, siga o passo a passo: [🔗 Laravel PT-BR Localization](https://github.com/lucascudo/laravel-pt-BR-localization)
+
+O repositório já vem com a tradução ativada. Para alterar o idioma, modifique a variável `APP_LOCALE` no arquivo `.env`.
+
+---
+
+## 🎯 Conclusão 🎉
+
+Agora seu ambiente está pronto para o desenvolvimento com **WSL, Ubuntu 24.04, Docker e Laravel**. 🚀
+
+Caso tenha dúvidas, consulte a documentação oficial de cada tecnologia utilizada:
+
+- 📖 [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
+- 🐳 [Docker](https://docs.docker.com/get-docker/)
+- 🌍 [Laravel](https://laravel.com/docs/11.x/installation)
+
+Happy coding! 💻✨
+
