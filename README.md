@@ -127,7 +127,11 @@ composer run dev
 
 O ambiente foi desenvolvido com base no [Curso Completo e Gratuito de Laravel 11](https://academy.especializati.com.br/curso/laravel-11-completo-e-gratuito) da [Especializa Ti Academy](https://academy.especializati.com.br/) onde foi realizado algumas alterações disponiveis neste repositório.
 
-Com tudo pronto, suba os containers do projeto
+Com tudo pronto, crie uma rede no docker chamada `Laravel` suba os containers do projeto
+```bash
+docker network create laravel
+```
+Suba os containers do projeto
 ```bash
 docker-compose up -d
 ```

@@ -1,69 +1,100 @@
-version: "3"
+version: '3.8'
 
 services:
-    # image project
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        restart: unless-stopped
-        working_dir: /var/www/
-        volumes:
-            - ./:/var/www
-        depends_on:
-            - redis
-        networks:
-            - laravel
+  # Portainer para gerenciamento do Docker
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    container_name: portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      - TZ=America/Sao_Paulo
+    networks:
+      - laravel
 
-    # nginx
-    nginx:
-        image: nginx:alpine
-        restart: unless-stopped
-        ports:
-            - "8000:80"
-        volumes:
-            - ./:/var/www
-            - ./docker/nginx/:/etc/nginx/conf.d/
-        networks:
-            - laravel
+  # Laravel App
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - laravel
 
-    # db mysql
-    db:
-        image: mysql:8.0
-        platform: linux/x86_64
-        restart: unless-stopped
-        environment:
-            MYSQL_DATABASE: ${DB_DATABASE:-db_helpmail}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-            MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
-            MYSQL_USER: ${DB_USERNAME:-username}
-        volumes:
-            - ./.docker/mysql/dbdata:/var/lib/mysql
-        ports:
-            - "3300:3306"
-        networks:
-            - laravel
+  # Nginx para servir a aplicação
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+      - laravel
 
-    # PHPMyAdmin
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        platform: linux/x86_64
-        restart: unless-stopped
-        ports:
-            - "8080:80"
-        environment:
-            PMA_HOST: db
-            PMA_PORT: 3306
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-        networks:
-            - laravel
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306" # Porta padrão do MySQL
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-db_default}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
+      MYSQL_USER: ${DB_USERNAME:-username}
+      TZ: America/Sao_Paulo # Define o timezone para logs consistentes
+    volumes:
+      - ./.docker/mysql/dbdata:/var/lib/mysql # Persistência dos dados do MySQL
+    networks:
+      - laravel
+    deploy:
 
-    # redis
-    redis:
-        image: redis:latest
-        networks:
-            - laravel
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    container_name: phpmyadmin
+    ports:
+      - "8082:80" # Mapeia a porta 80 do container para a porta 8082 no host
+    environment:
+      PMA_HOST: mysql # Nome do serviço MySQL (mesmo nome do container MySQL)
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+      TZ: America/Sao_Paulo
+    networks:
+      - laravel
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    container_name: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    environment:
+      - TZ=America/Sao_Paulo
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
+volumes:
+  mysql_data: # Volume nomeado para MySQL
+  portainer_data:
+  redis_data:
 
 networks:
-    laravel:
-        driver: bridge
+  laravel:
+    external: true # Usa a rede já criada no Docker
