@@ -159,7 +159,7 @@ composer install
 
 ## 6️⃣ Configuração do ambiente de desenvolvimento 🖥️
 
-O ambiente foi baseado no [Curso Completo e Gratuito de Laravel 11](https://academy.especializati.com.br/curso/laravel-11-completo-e-gratuito) da [Especializa Ti Academy](https://academy.especializati.com.br/).
+O ambiente foi baseado no [Curso Completo e Gratuito de Laravel 11](https://academy.especializati.com.br/curso/laravel-11-completo-e-gratuito) da [Especializa Ti Academy](https://academy.especializati.com.br/) por [@carlosfgti](https://github.com/carlosfgti) 
 
 ### 🌍 Criando e configurando a rede no Docker
 
