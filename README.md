@@ -133,11 +133,11 @@ docker network create laravel
 ```
 Suba os containers do projeto
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 Acesse o container
 ```bash
-docker-compose exec app bash
+docker compose exec app bash
 ```
 Instale as dependências do projeto
 ```bash
@@ -147,4 +147,21 @@ Gere a key do projeto Laravel
 ```bash
 php artisan key:generate
 ```
+Criar tabelas de dados do MySQL
+```bash
+php artisan migrate
+```
+
+no terminar para que possa realizar o teste de execução da aplicação, rode:
+
+```bash
+npm run dev
+```
+ou
+
+```bash
+npm run build
+```
+
+
 Acesse o projeto em http://localhost:8000
