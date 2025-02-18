@@ -1,0 +1,60 @@
+## Laravel specific files
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+/storage/*.log
+/storage/oauth-private.key
+/storage/oauth-public.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/bootstrap/cache/*
+
+## Environment files
+.env
+.env.backup
+.env.production
+
+## IDE and Editor files
+*.swp
+*.swo
+.idea/
+.vscode/
+/.fleet
+/.nova
+/.zed
+/.docker
+
+## System files
+.DS_Store
+Thumbs.db
+
+## Composer and NPM
+composer.phar
+npm-debug.log
+yarn-error.log
+
+## Logs and Debugging files
+*.log
+*.sqlite
+
+## PHPUnit and Coverage reports
+phpunit.xml
+/phpunit.result.cache
+/.phpunit.cache
+/phpunit.result.cache
+
+## Laravel Telescope
+/telescope/
+
+## Misc
+*.bak
+*.tmp
+/auth.json
+Homestead.json
+Homestead.yaml
+.phpactor.json
+/public/build
+/public/hot
+/storage/pail
