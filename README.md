@@ -1,4 +1,4 @@
-# 🚀 WSL, Ubuntu 24.04, Docker e Laravel 🌍
+# 🚀 WSL, Docker e Laravel 11 🌍
 
 Este guia aborda a instalação e configuração do ambiente de desenvolvimento utilizando **WSL**, **Ubuntu 24.04**, **Docker** e **Laravel**, com base no Windows 11.
 
