@@ -1,4 +1,5 @@
-version: '3.8'
+#version: '3.8'
+# Criar rede laravel 'docker network create laravel'
 
 services:
   # Portainer para gerenciamento do Docker
